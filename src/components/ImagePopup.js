@@ -2,7 +2,7 @@ function ImagePopup(props) {
   return (
     <div
       className={` popup popup_type_image ${
-        props.onCardClick.state ? "popup_is-open" : ""
+        props.onCardClick.state && "popup_is-open"
       }`}
     >
       <div className="popup__containe-image">

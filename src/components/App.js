@@ -11,7 +11,7 @@ function App() {
   const [onAddPlace, isAddPlacePopupOpen] = useState(false); // карточка
   const [onEditAvatar, isEditAvatarPopupOpen] = useState(false); // аватар
 
-  const [selectedCard, handleCardClick] = useState(false); //для открытия большой карточки
+  const [selectedCard, handleCardClick] = useState({}); //для открытия большой карточки
 
   //пробрасываем в card данные для отрисовки большой карточки
   function onCardClick(name, link) {    
@@ -22,7 +22,7 @@ function App() {
     isEditProfilePopupOpen(false);
     isAddPlacePopupOpen(false);
     isEditAvatarPopupOpen(false);
-    handleCardClick(false);
+    handleCardClick({});
   }
 
   return (
@@ -50,6 +50,7 @@ function App() {
             title="Редактировать профиль"
             isOpen={onEditProfile}
             closeAllPopups={closeAllPopups}
+            buttonText="Сохранить"
           >
             <input
               name="name"
@@ -80,6 +81,7 @@ function App() {
             title="Новое место"
             isOpen={onAddPlace}
             closeAllPopups={closeAllPopups}
+            buttonText="Сохранить"
           >
             <input
               name="name"
@@ -108,13 +110,14 @@ function App() {
             closeAllPopups={closeAllPopups}
           ></ImagePopup>
 
-          <PopupWithForm name="sure-del" title="Вы уверены ?"></PopupWithForm>
+          <PopupWithForm name="sure-del" title="Вы уверены ?" buttonText="Да"></PopupWithForm>
 
           <PopupWithForm
             name="changl-avatar"
             title="Обновить Аватар"
             isOpen={onEditAvatar}
             closeAllPopups={closeAllPopups}
+            buttonText="Сохранить"
           >
             <input
               name="link"

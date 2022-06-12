@@ -5,11 +5,11 @@ import krest from "../images/krest.svg";
 
 function Main(props) {
   //для данных о пользователе
-  const [userName, setUserName] = useState();
-  const [userDescription, setUserDescription] = useState();
-  const [userAvatar, setUserAvatar] = useState();
+  const [userName, setUserName] = useState("");
+  const [userDescription, setUserDescription] = useState("");
+  const [userAvatar, setUserAvatar] = useState("");
   //для данных карточек
-  const [card, setCards] = useState();
+  const [card, setCards] = useState([]);
 
   useEffect(() => {
     api.getInitialCards().then((data) => {
@@ -22,7 +22,9 @@ function Main(props) {
           _id: item._id, //id самой карточки
         }))
       );
-    });
+    }).catch((err) => {
+      console.log(err); // выведем ошибку в консоль
+    }); //так как это промис продолжаем ствавить ВЕН;    
   }, []);
 
   //для данных о пользователе
@@ -31,7 +33,9 @@ function Main(props) {
       setUserName(data.name);
       setUserDescription(data.about);
       setUserAvatar(data.avatar);
-    });
+    }).catch((err) => {
+      console.log(err); // выведем ошибку в консоль
+    }); //так как это промис продолжаем ствавить ВЕН;  
   }, []);
 
   return (
@@ -69,8 +73,8 @@ function Main(props) {
       </section>
       <section className="section elements content__section">
         <ul className="elements__item">
-          {card &&
-            card.map((cards) => (
+          {
+            card?.map((cards) => ( //опциональная цепочка https://learn.javascript.ru/optional-chaining 
               <Cards
                 name={cards.name}
                 link={cards.link}
