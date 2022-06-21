@@ -1,42 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api } from "../../src/utils/Api.js";
 import Cards from "./Cards.js";
 import krest from "../images/krest.svg";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import { CurrentCardsContext } from "../contexts/CurrentCardContext.js";
 
 function Main(props) {
-  //для данных о пользователе
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
-  //для данных карточек
-  const [card, setCards] = useState([]);
-
-  useEffect(() => {
-    api.getInitialCards().then((data) => {
-      setCards(
-        data.map((item) => ({
-          name: item.name,
-          link: item.link,
-          likes: item.likes, //массив из лайкнувших, потом посчитаю и проверю свой
-          owner: item.owner._id, //для проверки кто создал карточку\вешать корзину?
-          _id: item._id, //id самой карточки
-        }))
-      );
-    }).catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    }); //так как это промис продолжаем ствавить ВЕН;    
-  }, []);
-
-  //для данных о пользователе
-  useEffect(() => {
-    api.getInitialUser().then((data) => {
-      setUserName(data.name);
-      setUserDescription(data.about);
-      setUserAvatar(data.avatar);
-    }).catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    }); //так как это промис продолжаем ствавить ВЕН;  
-  }, []);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { cards, setCards } = useContext(CurrentCardsContext);
 
   return (
     <main className="content page__content">
@@ -46,13 +17,13 @@ function Main(props) {
             <img
               onClick={() => props.isOpenAvatar(true)}
               className="profile__image"
-              src={userAvatar}
+              src={currentUser.avatar}
               alt="аватар"
             />
           </div>
           <div className="profile__text-pen">
             <div className="profile__text-pen-position">
-              <h1 className="profile__name">{userName}</h1>
+              <h1 className="profile__name">{currentUser.name}</h1>
               <button
                 onClick={() => props.isOpenProfile(true)}
                 className="profile__button-open"
@@ -60,7 +31,7 @@ function Main(props) {
                 type="button"
               ></button>
             </div>
-            <p className="profile__profession">{userDescription}</p>
+            <p className="profile__profession">{currentUser.about}</p>
           </div>
         </div>
         <button
@@ -73,8 +44,10 @@ function Main(props) {
       </section>
       <section className="section elements content__section">
         <ul className="elements__item">
-          {
-            card?.map((cards) => ( //опциональная цепочка https://learn.javascript.ru/optional-chaining 
+          {cards?.map(
+            (
+              cards //опциональная цепочка https://learn.javascript.ru/optional-chaining
+            ) => (
               <Cards
                 name={cards.name}
                 link={cards.link}
@@ -82,9 +55,12 @@ function Main(props) {
                 owner={cards.owner}
                 _id={cards._id}
                 onCardClick={props.onCardClick}
+                onCardLike={props.handleCardLike}
+                onCardDelete={props.handleCardDelete}
                 key={cards._id}
               ></Cards>
-            ))}
+            )
+          )}
         </ul>
       </section>
     </main>

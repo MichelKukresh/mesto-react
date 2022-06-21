@@ -94,9 +94,9 @@ class Api {
     });
   }
 
-  putLikeCard(id) {
+  changeLikeCardStatus(id, met) {
     return fetch(`${this._baseUrl}cards/likes/${id}`, {
-      method: "PUT",
+      method: met,
       headers: this._headers,
     }).then((res) => {
       if (res.ok) {
@@ -119,6 +119,7 @@ class Api {
       return Promise.reject(`Ошибка: ${res.status}`);
     });
   }
+
   //!!!USER
   patchAvatar(link) {
     return fetch(`${this._baseUrl}users/me/avatar`, {
