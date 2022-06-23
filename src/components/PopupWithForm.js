@@ -15,9 +15,8 @@ function PopupWithForm(props) {
         <form className="popup__content" name="popup-card-content" noValidate>
           {props.children}
           <button
-            // type="submit" потребудется дальше
-            className="popup__save popup__save_invalid "
-            // disabled потребудется дальше
+            className={`popup__save popup__save_invalid ${props.isFormIsValid}`}
+            disabled={props.isDisableStatus}            
             onClick={(e) => props.onSubmit(e)}
           >
             {props.buttonText}

@@ -1,13 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { api } from "../../src/utils/Api.js";
-import Cards from "./Cards.js";
+import Card from "./Card.js";
 import krest from "../images/krest.svg";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import { CurrentCardsContext } from "../contexts/CurrentCardContext.js";
 
 function Main(props) {
   const { currentUser } = useContext(CurrentUserContext);
-  const { cards, setCards } = useContext(CurrentCardsContext);
 
   return (
     <main className="content page__content">
@@ -44,11 +41,11 @@ function Main(props) {
       </section>
       <section className="section elements content__section">
         <ul className="elements__item">
-          {cards?.map(
+          {props.cards?.map(
             (
               cards //опциональная цепочка https://learn.javascript.ru/optional-chaining
             ) => (
-              <Cards
+              <Card
                 name={cards.name}
                 link={cards.link}
                 likes={cards.likes}
@@ -56,9 +53,10 @@ function Main(props) {
                 _id={cards._id}
                 onCardClick={props.onCardClick}
                 onCardLike={props.handleCardLike}
-                onCardDelete={props.handleCardDelete}
+                onCardDelete={props.isOpenCourseDelete}
+                onCardDeleteCourse={props.handleCardCourseDelete}
                 key={cards._id}
-              ></Cards>
+              ></Card>
             )
           )}
         </ul>
@@ -68,3 +66,4 @@ function Main(props) {
 }
 
 export default Main;
+//onCardDelete={props.handleCardDelete}

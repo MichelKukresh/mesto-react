@@ -1,15 +1,15 @@
 import { useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import "./Cards.js";
+import "./Card.js";
 
-function Сards(props) {
+function Сard(props) {
   const { currentUser } = useContext(CurrentUserContext);
 
   function handleCardClick() {
     props.onCardClick(props.name, props.link);
   }
 
-  const isOwn = props.owner === currentUser._id; //проверяем создал ли я, для добавления корзины
+  const isOwn = props.owner._id === currentUser._id; //проверяем создал ли я, для добавления корзины
   const cardDeleteButtonClassName = `elements__dell ${
     !isOwn && "elements__dell_none"
   }`;
@@ -24,7 +24,8 @@ function Сards(props) {
   };
 
   const handleDeleteClick = () => {
-    props.onCardDelete(props);
+    props.onCardDelete(true);
+    props.onCardDeleteCourse(props);
   };
 
   return (
@@ -55,4 +56,4 @@ function Сards(props) {
   );
 }
 
-export default Сards;
+export default Сard;

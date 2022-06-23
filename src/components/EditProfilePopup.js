@@ -3,6 +3,9 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 
 function EditProfilePopup(props) {
+  
+
+
   const { currentUser } = useContext(CurrentUserContext);
 
   const [name, setName] = useState("");
@@ -10,16 +13,13 @@ function EditProfilePopup(props) {
 
   function handleChangeName(e) {
     setName(e.target.value);
+    inputNameValidation(e);
   }
 
   function handleChangeDescription(e) {
     setDescription(e.target.value);
+    inputLinkValidation(e);
   }
-
-  useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
-  }, [currentUser]);
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
@@ -32,8 +32,45 @@ function EditProfilePopup(props) {
     });
   }
 
+  const [isFormValiditi, setformValiditi] = useState({
+    inputName: true,
+    inputLink: true,
+  });
+
+  const [inputNameError, setInputNameError] = useState("");
+  const inputNameValidation = (e) => {
+    setInputNameError(e.target.validationMessage);
+    setformValiditi({ ...isFormValiditi, inputName: e.target.validity.valid });
+  };
+
+  const [inputDescriptionkError, setInputDescriptionkError] = useState("");
+  const inputLinkValidation = (e) => {
+    setInputDescriptionkError(e.target.validationMessage);
+    setformValiditi({ ...isFormValiditi, inputLink: e.target.validity.valid });
+  };
+
+  const isFormIsValid =
+    isFormValiditi.inputName && isFormValiditi.inputLink
+      ? "popup__save_valid"
+      : "";
+
+  let isDisableStatus =
+      (isFormValiditi.inputName && isFormValiditi.inputLink) ? false : true;
+    
+      useEffect(() => {         
+        isDisableStatus = true;               
+        setName(currentUser.name);    
+        setDescription(currentUser.about); 
+        setInputDescriptionkError("");
+        setInputNameError("");
+        setformValiditi({ ...isFormValiditi, inputName: true,
+          inputLink: true, })       
+      }, [currentUser, props.isOpen]);        
+
   return (
     <PopupWithForm
+      isDisableStatus={isDisableStatus}
+      isFormIsValid={isFormIsValid}
       onSubmit={handleSubmit}
       isOpen={props.isOpen}
       closeAllPopups={props.closeAllPopups}
@@ -53,7 +90,9 @@ function EditProfilePopup(props) {
         type="text"
         required
       />
-      <span id="popup-input-name-error" className="popup__error"></span>
+      <span id="popup-input-name-error" className="popup__error">
+        {inputNameError}
+      </span>
       <input
         value={description}
         onChange={handleChangeDescription}
@@ -66,7 +105,9 @@ function EditProfilePopup(props) {
         type="text"
         required
       />
-      <span id="popup-input-profession-error" className="popup__error"></span>
+      <span id="popup-input-profession-error" className="popup__error">
+        {inputDescriptionkError}
+      </span>
     </PopupWithForm>
   );
 }
