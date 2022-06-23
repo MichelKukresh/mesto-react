@@ -8,7 +8,6 @@ function EditCourseDeletePopup(props) {
   };
 
   const isFormIsValid = "popup__save_valid";
-
   const isDisableStatus = false;
 
   return (
