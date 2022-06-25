@@ -56,7 +56,7 @@ function AddPlacePopup(props) {
       closeAllPopups={props.closeAllPopups}
       name="new-card"
       title="Новое место"
-      buttonText="Сохранить"
+      buttonText={props.buttonInfomationAboutSave}
       isFormIsValid={isFormIsValid}
     >
       <input

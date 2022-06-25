@@ -30,19 +30,17 @@ function EditAvatarPopup(props) {
     });
   }
 
-  let isDisableStatus =
-       isFormValiditi.inputLink ? false : true;
-    
+  const isDisableStatus = isFormValiditi.inputLink ? false : true;
 
   return (
     <PopupWithForm
-    isDisableStatus={isDisableStatus}
+      isDisableStatus={isDisableStatus}
       onSubmit={handleSubmit}
       isOpen={props.isOpen}
       closeAllPopups={props.closeAllPopups}
       name="changl-avatar"
       title="Обновить Аватар"
-      buttonText="Сохранить"
+      buttonText={props.buttonInfomationAboutSave}
       isFormIsValid={isFormIsValid}
     >
       <input

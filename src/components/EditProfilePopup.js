@@ -3,9 +3,6 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 
 function EditProfilePopup(props) {
-  
-
-
   const { currentUser } = useContext(CurrentUserContext);
 
   const [name, setName] = useState("");
@@ -54,18 +51,20 @@ function EditProfilePopup(props) {
       ? "popup__save_valid"
       : "";
 
-  let isDisableStatus =
-      (isFormValiditi.inputName && isFormValiditi.inputLink) ? false : true;
-    
-      useEffect(() => {         
-        isDisableStatus = true;               
-        setName(currentUser.name);    
-        setDescription(currentUser.about); 
-        setInputDescriptionkError("");
-        setInputNameError("");
-        setformValiditi({ ...isFormValiditi, inputName: true,
-          inputLink: true, })       
-      }, [currentUser, props.isOpen]);        
+  const [isDisableStatus, setIsDisableStatus] = useState(false); // isDisableStatus отличается от остальных, так как функционал валидации этого попапа отличается.
+  useEffect(() => {
+    setIsDisableStatus(
+      isFormValiditi.inputName && isFormValiditi.inputLink ? false : true
+    );    
+  }, [name, description, props.isOpen]);
+
+  useEffect(() => {
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+    setInputDescriptionkError("");
+    setInputNameError("");
+    setformValiditi({ ...isFormValiditi, inputName: true, inputLink: true });
+  }, [currentUser, props.isOpen]);
 
   return (
     <PopupWithForm
@@ -76,7 +75,7 @@ function EditProfilePopup(props) {
       closeAllPopups={props.closeAllPopups}
       name="edit-profile"
       title="Редактировать профиль"
-      buttonText="Сохранить"
+      buttonText={props.buttonInfomationAboutSave}
     >
       <input
         value={name}

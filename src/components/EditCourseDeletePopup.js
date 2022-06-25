@@ -3,8 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 function EditCourseDeletePopup(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.handleCardDelete(props.cardDelete);
-    props.closeAllPopups();
+    props.handleCardDelete(props.cardDelete);    
   };
 
   const isFormIsValid = "popup__save_valid";
@@ -17,7 +16,7 @@ function EditCourseDeletePopup(props) {
       onSubmit={handleSubmit}
       name="sure-del"
       title="Вы уверены ?"
-      buttonText="Да"
+      buttonText={props.buttonInfomationDelete}
       isOpen={props.isOpen}
       closeAllPopups={props.closeAllPopups}
     ></PopupWithForm>

@@ -66,4 +66,4 @@ function Main(props) {
 }
 
 export default Main;
-//onCardDelete={props.handleCardDelete}
+

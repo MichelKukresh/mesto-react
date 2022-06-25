@@ -14,12 +14,16 @@ import EditCourseDeletePopup from "./EditCourseDeletePopup";
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false); // профиль
 
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false); // карточка
-  const [isOnEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false); // аватар
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false); // карточка
+  const [isOnEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false); // аватар
   const [currentUser, setCurrentUser] = useState({ name: "", about: "" }); //о пользователе => провайдер
-  const [isEditCourseDeletePopupOpen, setEditCourseDeletePopupOpen] =
+  const [isEditCourseDeletePopupOpen, setIsEditCourseDeletePopupOpen] =
     useState(false); // подтверждение удаления
   const [cardDeleteAfterCourse, setCardDeleteAfterCourse] = useState({}); //карточка которую нужно удалить
+
+  const [buttonInfomationAboutSave, setButtonInfomationAboutSave] =
+    useState("Сохранить"); // функционал добавления подсказки
+  const [buttonInfomationDelete, setButtonInfomationDelete] = useState("Да"); // функционал добавления подсказки
 
   //для данных о пользователе
   useEffect(() => {
@@ -72,15 +76,18 @@ function App() {
   }
 
   function handleCardDelete(card) {
+    setButtonInfomationDelete("Удаление...");
     api
       .deleteCard(card._id)
       .then(() => {
         const cardsWithoutDeleteCard = cards.filter((c) => c._id !== card._id);
         setCards(cardsWithoutDeleteCard);
       })
+      .then(() => closeAllPopups())
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setButtonInfomationDelete("Да"));
   }
 
   const [selectedCard, setSelectedCard] = useState({
@@ -96,47 +103,53 @@ function App() {
 
   function closeAllPopups() {
     setEditProfilePopupOpen(false);
-    setAddPlacePopupOpen(false);
-    setEditAvatarPopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
     setSelectedCard({ state: false, name: "", link: "" });
-    setEditCourseDeletePopupOpen(false);
+    setIsEditCourseDeletePopupOpen(false);
   }
 
   function handleUpdateUser({ name, profession }) {
+    setButtonInfomationAboutSave("Сохранение...");
     api
       .patchUserInfoNameAbout(name, profession)
       .then((data) => {
         setCurrentUser(data);
-
-        closeAllPopups();
       })
+      .then(() => closeAllPopups())
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setButtonInfomationAboutSave("Сохранить"));
   }
 
   function handleUpdateAvatar({ avatar }) {
+    setButtonInfomationAboutSave("Сохранение...");
+
     api
       .patchAvatar(avatar)
       .then((data) => {
         setCurrentUser(data);
-        closeAllPopups();
       })
+      .then(() => closeAllPopups())
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setButtonInfomationAboutSave("Сохранить"));
   }
 
   function handleAddPlace({ name, link }) {
+    setButtonInfomationAboutSave("Сохранение...");
     api
       .postCard(name, link)
       .then((newCard) => {
         setCards([newCard, ...cards]);
-        closeAllPopups();
       })
+      .then(() => closeAllPopups())
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setButtonInfomationAboutSave("Сохранить"));
   }
 
   return (
@@ -149,10 +162,10 @@ function App() {
             handleCardLike={handleCardLike}
             handleCardDelete={handleCardDelete}
             isOpenProfile={setEditProfilePopupOpen}
-            isOpenPlace={setAddPlacePopupOpen}
-            isOpenAvatar={setEditAvatarPopupOpen}
+            isOpenPlace={setIsAddPlacePopupOpen}
+            isOpenAvatar={setIsEditAvatarPopupOpen}
             onCardClick={onCardClick}
-            isOpenCourseDelete={setEditCourseDeletePopupOpen} //подтверждение удаления
+            isOpenCourseDelete={setIsEditCourseDeletePopupOpen} //подтверждение удаления
             handleCardCourseDelete={setCardDeleteAfterCourse}
           />
           <Footer />
@@ -161,18 +174,21 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             closeAllPopups={closeAllPopups}
             onUpdateUser={handleUpdateUser}
+            buttonInfomationAboutSave={buttonInfomationAboutSave}
           />
 
           <EditAvatarPopup
             isOpen={isOnEditAvatarPopupOpen}
             closeAllPopups={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
+            buttonInfomationAboutSave={buttonInfomationAboutSave}
           ></EditAvatarPopup>
 
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             closeAllPopups={closeAllPopups}
             onUpdatePlace={handleAddPlace}
+            buttonInfomationAboutSave={buttonInfomationAboutSave}
           ></AddPlacePopup>
 
           <ImagePopup
@@ -185,6 +201,7 @@ function App() {
             closeAllPopups={closeAllPopups}
             cardDelete={cardDeleteAfterCourse}
             handleCardDelete={handleCardDelete}
+            buttonInfomationDelete={buttonInfomationDelete}
           ></EditCourseDeletePopup>
         </div>
       </div>
