@@ -12,7 +12,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import EditCourseDeletePopup from "./EditCourseDeletePopup";
 
 function App() {
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false); // профиль
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false); // профиль
 
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false); // карточка
   const [isOnEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false); // аватар
@@ -102,7 +102,7 @@ function App() {
   }
 
   function closeAllPopups() {
-    setEditProfilePopupOpen(false);
+    setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard({ state: false, name: "", link: "" });
@@ -161,7 +161,7 @@ function App() {
             cards={cards}
             handleCardLike={handleCardLike}
             handleCardDelete={handleCardDelete}
-            isOpenProfile={setEditProfilePopupOpen}
+            isOpenProfile={setIsEditProfilePopupOpen}
             isOpenPlace={setIsAddPlacePopupOpen}
             isOpenAvatar={setIsEditAvatarPopupOpen}
             onCardClick={onCardClick}
